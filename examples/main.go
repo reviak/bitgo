@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	token      = "v2xfbfbbafa909bc4756d17e98a3b24a679706b3a812c3a82295ad621b72e99b1e6"
+	//token      = "v2xfbfbbafa909bc4756d17e98a3b24a679706b3a812c3a82295ad621b72e99b1e6"
+	token      = "v2xaba3427d8b0fb47c67cf6f70cbf2d2b74361ffce244aaac99005732c5e5582d0"
 	enterprise = "5b8647e21ca5ee8203aab3855c962b4f"
 )
 
@@ -46,10 +47,23 @@ func main() {
 		log.Fatalf("CreateBackupKeychain: %#v\n", err)
 	}
 	log.Printf("Bitgo keychain: %#v\n", bkpkch)
-
+	// Encrypted private key
+	// {
+	//	"iv":"ggUzzmkL/08MKCvEbpXcdg==",
+	//	"v":1,
+	//	"iter":10000,
+	//	"ks":256,
+	//	"ts":64,
+	//	"mode":"ccm",
+	//	"adata":"",
+	//	"cipher":"aes",
+	//	"salt":"cFoqYCe+kWE=",
+	//	"ct":"tWCCDdeIIVGjRpRJQvBXkCohnfPaoG0vjRFtEz4H22o7GnQ+0MCLnYFhFEvXWQoVq2WFkOVQ/QbQb5GEMu4sBOnjOFuya35m45mn4m3pH7qcc5yrTUiuY5ETd+m3HEomm54OUMxNik9C4crXcCly/xxapa6YOGo="
+	//}
 	// save
 	savedLocalKeyChain, err := b.Token(token).Coin("tbtc").AddKeychain(bitgo.AddKeychainParams{
 		Pub: localKeychain.Pub,
+		//Priv: localKeychain.Priv,
 		Source: "bitgo",
 	})
 	if err != nil {
@@ -59,7 +73,8 @@ func main() {
 
 	savedBkpkch, err := b.Token(token).Coin("tbtc").AddKeychain(bitgo.AddKeychainParams{
 		Pub: bkpkch.Pub,
-		Source: "bitgo",
+		//Priv: bkpkch.Priv,
+		Source: "backup",
 	})
 
 	if err != nil {
