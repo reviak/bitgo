@@ -17,8 +17,7 @@ type TotalBalances struct {
 
 func (b *BitGo) GetTotalBalances() (total TotalBalances, err error) {
 	err = b.get(
-		fmt.Sprintf("%s/wallet/balances",
-			b.coin),
+		fmt.Sprintf("%s/wallet/balances", b.coin),
 		nil,
 		&total)
 	return
@@ -57,9 +56,7 @@ type Transaction struct {
 
 func (b *BitGo) BuildTransaction(walletId string, params BuildTransactionParams) (transaction Transaction, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/%s/tx/build",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/tx/build", b.coin, walletId),
 		params,
 		&transaction)
 	return

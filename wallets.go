@@ -48,23 +48,14 @@ type Wallet struct {
 	ApprovalsRequired int  `json:"approvalsRequired"`
 	CoinSpecific      struct {
 	} `json:"coinSpecific"`
-	Balance                int    `json:"balance"`
-	ConfirmedBalance       int    `json:"confirmedBalance"`
-	SpendableBalance       int    `json:"spendableBalance"`
-	BalanceString          string `json:"balanceString"`
-	ConfirmedBalanceString string `json:"confirmedBalanceString"`
-	SpendableBalanceString string `json:"spendableBalanceString"`
-	ReceiveAddress         struct {
-		Address      string `json:"address"`
-		Chain        int    `json:"chain"`
-		Index        int    `json:"index"`
-		Coin         string `json:"coin"`
-		Wallet       string `json:"wallet"`
-		CoinSpecific struct {
-			RedeemScript string `json:"redeemScript"`
-		} `json:"coinSpecific"`
-	} `json:"receiveAddress"`
-	Admin struct {
+	Balance                int            `json:"balance"`
+	ConfirmedBalance       int            `json:"confirmedBalance"`
+	SpendableBalance       int            `json:"spendableBalance"`
+	BalanceString          string         `json:"balanceString"`
+	ConfirmedBalanceString string         `json:"confirmedBalanceString"`
+	SpendableBalanceString string         `json:"spendableBalanceString"`
+	ReceiveAddress         ReceiveAddress `json:"receiveAddress"`
+	Admin                  struct {
 		Policy struct {
 			ID      string    `json:"id"`
 			Label   string    `json:"label"`
@@ -110,25 +101,27 @@ type GeneratedWallet struct {
 			IsCold            bool `json:"isCold"`
 			CoinSpecific      struct {
 			} `json:"coinSpecific"`
-			Balance                int    `json:"balance"`
-			ConfirmedBalance       int    `json:"confirmedBalance"`
-			SpendableBalance       int    `json:"spendableBalance"`
-			BalanceString          string `json:"balanceString"`
-			ConfirmedBalanceString string `json:"confirmedBalanceString"`
-			SpendableBalanceString string `json:"spendableBalanceString"`
-			ReceiveAddress         struct {
-				Address      string `json:"address"`
-				Chain        int    `json:"chain"`
-				Index        int    `json:"index"`
-				Coin         string `json:"coin"`
-				Wallet       string `json:"wallet"`
-				CoinSpecific struct {
-					RedeemScript string `json:"redeemScript"`
-				} `json:"coinSpecific"`
-			} `json:"receiveAddress"`
-			PendingApprovals []interface{} `json:"pendingApprovals"`
+			Balance                int            `json:"balance"`
+			ConfirmedBalance       int            `json:"confirmedBalance"`
+			SpendableBalance       int            `json:"spendableBalance"`
+			BalanceString          string         `json:"balanceString"`
+			ConfirmedBalanceString string         `json:"confirmedBalanceString"`
+			SpendableBalanceString string         `json:"spendableBalanceString"`
+			ReceiveAddress         ReceiveAddress `json:"receiveAddress"`
+			PendingApprovals       []interface{}  `json:"pendingApprovals"`
 		} `json:"_wallet"`
 	} `json:"wallet"`
+}
+
+type ReceiveAddress struct {
+	Address      string `json:"address"`
+	Chain        int    `json:"chain"`
+	Index        int    `json:"index"`
+	Coin         string `json:"coin"`
+	Wallet       string `json:"wallet"`
+	CoinSpecific struct {
+		RedeemScript string `json:"redeemScript"`
+	} `json:"coinSpecific"`
 }
 
 // List Wallets
@@ -160,6 +153,30 @@ func (b *BitGo) GenerateWallet(params GenerateWalletParams) (wallet GeneratedWal
 	err = b.post(
 		fmt.Sprintf("%s/wallet/generate",
 			b.coin),
+		params,
+		&wallet)
+	return
+}
+
+// Add Wallet
+type AddWalletParams struct {
+	Label                           string   `json:"label,required"`
+	M                               int32    `json:"m,required"`
+	N                               int32    `json:"n,required"`
+	Keys                            []string `json:"keys,required"`
+	Enterprise                      string   `json:"enterprise,omitempty"`
+	IsCold                          bool     `json:"isCold,omitempty"`
+	DisableTransactionNotifications bool     `json:"disableTransactionNotifications,omitempty"`
+}
+
+func (b *BitGo) AddWallet(params AddWalletParams) ( /*todo possibly not correct return structure*/ wallet GeneratedWallet, err error) {
+	//Creates the user keychain locally on the machine, and encrypts it with the provided passphrase (skipped if userKey is provided).
+	//Creates the backup keychain locally on the machine.
+	//	Uploads the encrypted user keychain and public backup keychain.
+	//	Creates the BitGo key (and the backup key if backupXpubProvider is set) on the service.
+	//	Creates the wallet on BitGo with the 3 public keys above.
+	err = b.post(
+		fmt.Sprintf("%s/wallet", b.coin),
 		params,
 		&wallet)
 	return
