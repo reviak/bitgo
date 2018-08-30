@@ -27,16 +27,17 @@ type ListParams struct {
 	AllTokens bool   `url:"allTokens,omitempty"`
 }
 
+// fixme tmp solution to test behavior with Express REST API
 func New(env string, timeout time.Duration) (b *BitGo, err error) {
 	if env == "" {
 		return nil, errors.New("empty env")
 	}
-	switch env {
-	case "test":
-		env = "https://test.bitgo.com"
-	case "prod":
-		env = "https://www.bitgo.com"
-	}
+	//switch env {
+	//case "test":
+	//	env = "https://test.bitgo.com"
+	//case "prod":
+	//	env = "https://www.bitgo.com"
+	//}
 	return &BitGo{
 		host:    env + "/api/v2",
 		timeout: timeout,
@@ -71,7 +72,7 @@ func (b *BitGo) Debug(debug bool) *BitGo {
 	return c
 }
 
-func (b *BitGo) get(url string, params interface{}, responce interface{}) (err error) {
+func (b *BitGo) get(url string, params interface{}, response interface{}) (err error) {
 	if params != nil {
 		_, err = valid.ValidateStruct(params)
 		if err != nil {
@@ -87,10 +88,10 @@ func (b *BitGo) get(url string, params interface{}, responce interface{}) (err e
 		return
 	}
 
-	return b.request(req, responce)
+	return b.request(req, response)
 }
 
-func (b *BitGo) modify(method string, url string, params interface{}, responce interface{}) (err error) {
+func (b *BitGo) modify(method string, url string, params interface{}, response interface{}) (err error) {
 	var req *http.Request
 
 	if params != nil {
@@ -119,7 +120,7 @@ func (b *BitGo) modify(method string, url string, params interface{}, responce i
 		}
 	}
 
-	return b.request(req, responce)
+	return b.request(req, response)
 }
 
 func (b *BitGo) post(url string, params interface{}, responce interface{}) (err error) {

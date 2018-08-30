@@ -3,6 +3,7 @@ package bitgo
 import (
 	"fmt"
 	"time"
+	"encoding/json"
 )
 
 type ListWallets struct {
@@ -81,36 +82,48 @@ type Wallet struct {
 
 type GeneratedWallet struct {
 	Wallet struct {
-		Wallet struct {
-			ID    string `json:"id"`
-			Users []struct {
-				User        string   `json:"user"`
-				Permissions []string `json:"permissions"`
-			} `json:"users"`
-			Coin                            string   `json:"coin"`
-			Label                           string   `json:"label"`
-			M                               int      `json:"m"`
-			N                               int      `json:"n"`
-			Keys                            []string `json:"keys"`
-			Tags                            []string `json:"tags"`
-			DisableTransactionNotifications bool     `json:"disableTransactionNotifications"`
-			Freeze                          struct {
-			} `json:"freeze"`
-			Deleted           bool `json:"deleted"`
-			ApprovalsRequired int  `json:"approvalsRequired"`
-			IsCold            bool `json:"isCold"`
-			CoinSpecific      struct {
-			} `json:"coinSpecific"`
-			Balance                int            `json:"balance"`
-			ConfirmedBalance       int            `json:"confirmedBalance"`
-			SpendableBalance       int            `json:"spendableBalance"`
-			BalanceString          string         `json:"balanceString"`
-			ConfirmedBalanceString string         `json:"confirmedBalanceString"`
-			SpendableBalanceString string         `json:"spendableBalanceString"`
-			ReceiveAddress         ReceiveAddress `json:"receiveAddress"`
-			PendingApprovals       []interface{}  `json:"pendingApprovals"`
-		} `json:"_wallet"`
+		Wallet ExpressApiGeneratedWallet `json:"_wallet"`
 	} `json:"wallet"`
+}
+
+func (w GeneratedWallet) String() string {
+	b, _ := json.MarshalIndent(&w, "", "  ")
+	return string(b)
+}
+
+type ExpressApiGeneratedWallet struct {
+	ID    string `json:"id"`
+	Users []struct {
+		User        string   `json:"user"`
+		Permissions []string `json:"permissions"`
+	} `json:"users"`
+	Coin                            string   `json:"coin"`
+	Label                           string   `json:"label"`
+	M                               int      `json:"m"`
+	N                               int      `json:"n"`
+	Keys                            []string `json:"keys"`
+	Tags                            []string `json:"tags"`
+	DisableTransactionNotifications bool     `json:"disableTransactionNotifications"`
+	Freeze                          struct {
+	} `json:"freeze"`
+	Deleted           bool `json:"deleted"`
+	ApprovalsRequired int  `json:"approvalsRequired"`
+	IsCold            bool `json:"isCold"`
+	CoinSpecific      struct {
+	} `json:"coinSpecific"`
+	Balance                int            `json:"balance"`
+	ConfirmedBalance       int            `json:"confirmedBalance"`
+	SpendableBalance       int            `json:"spendableBalance"`
+	BalanceString          string         `json:"balanceString"`
+	ConfirmedBalanceString string         `json:"confirmedBalanceString"`
+	SpendableBalanceString string         `json:"spendableBalanceString"`
+	ReceiveAddress         ReceiveAddress `json:"receiveAddress"`
+	PendingApprovals       []interface{}  `json:"pendingApprovals"`
+}
+
+func (w ExpressApiGeneratedWallet) String() string {
+	b, _ := json.MarshalIndent(&w, "", "  ")
+	return string(b)
 }
 
 type ReceiveAddress struct {
@@ -149,10 +162,9 @@ type GenerateWalletParams struct {
 	PasscodeEncryptionCode          string `json:"passcodeEncryptionCode,omitempty"`
 }
 
-func (b *BitGo) GenerateWallet(params GenerateWalletParams) (wallet GeneratedWallet, err error) {
+func (b *BitGo) GenerateWallet(params GenerateWalletParams) (wallet ExpressApiGeneratedWallet, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/generate",
-			b.coin),
+		fmt.Sprintf("%s/wallet/generate", b.coin),
 		params,
 		&wallet)
 	return
