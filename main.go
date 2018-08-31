@@ -131,6 +131,11 @@ func (b *BitGo) put(url string, params interface{}, responce interface{}) (err e
 	return b.modify(http.MethodPut, url, params, responce)
 }
 
+// todo verify if it behaves as expected and works properly with bitgo
+func (b *BitGo) delete(url string, params interface{}, responce interface{}) (err error) {
+	return b.modify(http.MethodDelete, url, params, responce)
+}
+
 func (b *BitGo) request(req *http.Request, responce interface{}) (err error) {
 	req.Header.Add("Authorization", "Bearer "+b.token)
 
