@@ -89,9 +89,7 @@ type TransactionDescription struct {
 
 func (b *BitGo) ListWalletTransfers(walletId string, params ListParams) (list TransferList, err error) {
 	err = b.get(
-		fmt.Sprintf("%s/wallet/%s/transfer",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/transfer", b.coin, walletId),
 		params,
 		&list)
 	return
@@ -101,10 +99,7 @@ func (b *BitGo) ListWalletTransfers(walletId string, params ListParams) (list Tr
 
 func (b *BitGo) GetWalletTransfer(walletId string, transferId string) (transfer Transfer, err error) {
 	err = b.get(
-		fmt.Sprintf("%s/wallet/%s/transfer/%s",
-			b.coin,
-			walletId,
-			transferId),
+		fmt.Sprintf("%s/wallet/%s/transfer/%s", b.coin, walletId, transferId),
 		nil,
 		&transfer)
 	return
@@ -114,10 +109,7 @@ func (b *BitGo) GetWalletTransfer(walletId string, transferId string) (transfer 
 
 func (b *BitGo) GetWalletTransferBySequenceID(walletId string, sequenceId string) (transfer Transfer, err error) {
 	err = b.get(
-		fmt.Sprintf("%s/wallet/%s/transfer/sequenceId/%s",
-			b.coin,
-			walletId,
-			sequenceId),
+		fmt.Sprintf("%s/wallet/%s/transfer/sequenceId/%s", b.coin, walletId, sequenceId),
 		nil,
 		&transfer)
 	return
@@ -132,9 +124,7 @@ type AddressParams struct {
 
 func (b *BitGo) CreateWalletAddress(walletId string, params *AddressParams) (address Address, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/%s/address",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/address", b.coin, walletId),
 		params,
 		&address)
 	return
@@ -144,10 +134,7 @@ func (b *BitGo) CreateWalletAddress(walletId string, params *AddressParams) (add
 
 func (b *BitGo) GetWalletAddress(walletId string, addressOrId string) (address Address, err error) {
 	err = b.get(
-		fmt.Sprintf("%s/wallet/%s/address/%s",
-			b.coin,
-			walletId,
-			addressOrId),
+		fmt.Sprintf("%s/wallet/%s/address/%s", b.coin, walletId, addressOrId),
 		nil,
 		&address)
 	return
@@ -161,10 +148,7 @@ type UpdateWalletAddressParams struct {
 
 func (b *BitGo) UpdateWalletAddress(walletId string, addressOrId string, params UpdateWalletAddressParams) (address Address, err error) {
 	err = b.put(
-		fmt.Sprintf("%s/wallet/%s/address/%s",
-			b.coin,
-			walletId,
-			addressOrId),
+		fmt.Sprintf("%s/wallet/%s/address/%s", b.coin, walletId, addressOrId),
 		params,
 		&address)
 	return
@@ -198,9 +182,7 @@ type SendParams struct {
 
 func (b *BitGo) SendTransaction(walletId string, params SendParams) (transactionDescription TransactionDescription, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/%s/sendcoins",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/sendcoins", b.coin, walletId),
 		params,
 		&transactionDescription)
 	return
@@ -239,9 +221,7 @@ type SendToManyParams struct {
 
 func (b *BitGo) SendTransactionToMany(walletId string, params SendToManyParams) (transactionDescription TransactionDescription, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/%s/sendmany",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/sendmany", b.coin, walletId),
 		params,
 		&transactionDescription)
 	return
