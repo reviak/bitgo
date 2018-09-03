@@ -139,11 +139,11 @@ type SimulateWalletWebhookParams struct {
 	PendingApprovalId string `json:"pendingApprovalId,omitempty"`
 }
 
-type SimulateWalletWebhookResp struct {
+type WalletWebhookNotifs struct {
 	WebhookNotifications []*WebhookWalletNotif `json:"webhookNotifications"`
 }
 
-func (b *BitGo) SimulateWalletWebhook(walletId string, webhookId string, params SimulateWalletWebhookParams) (resp SimulateWalletWebhookResp, err error) {
+func (b *BitGo) SimulateWalletWebhook(walletId string, webhookId string, params SimulateWalletWebhookParams) (resp WalletWebhookNotifs, err error) {
 	err = b.post(
 		fmt.Sprintf("%s/wallet/%s/webhooks/%s/simulate", b.coin, walletId, webhookId),
 		params,
