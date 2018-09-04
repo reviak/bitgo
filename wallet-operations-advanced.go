@@ -30,28 +30,34 @@ type BuildTransactionParams struct {
 }
 
 type Transaction struct {
-	TxHex  string `json:"txHex"`
-	TxInfo struct {
-		NP2SHInputs   int `json:"nP2SHInputs"`
-		NSegwitInputs int `json:"nSegwitInputs"`
-		NOutputs      int `json:"nOutputs"`
-		Unspents      []struct {
-			Chain        int    `json:"chain"`
-			Index        int    `json:"index"`
-			RedeemScript string `json:"redeemScript"`
-			ID           string `json:"id"`
-			Address      string `json:"address"`
-			Value        int    `json:"value"`
-		} `json:"unspents"`
-		ChangeAddresses []string `json:"changeAddresses"`
-	} `json:"txInfo"`
-	FeeInfo struct {
-		Size           int    `json:"size"`
-		Fee            int    `json:"fee"`
-		FeeRate        int    `json:"feeRate"`
-		PayGoFee       int    `json:"payGoFee"`
-		PayGoFeeString string `json:"payGoFeeString"`
-	} `json:"feeInfo"`
+	TxHex   string  `json:"txHex"`
+	TxInfo  TxInfo  `json:"txInfo"`
+	FeeInfo FeeInfo `json:"feeInfo"`
+}
+
+type TxInfo struct {
+	NP2SHInputs     int       `json:"nP2SHInputs"`
+	NSegwitInputs   int       `json:"nSegwitInputs"`
+	NOutputs        int       `json:"nOutputs"`
+	Unspents        []Unspent `json:"unspents"`
+	ChangeAddresses []string  `json:"changeAddresses"`
+}
+
+type FeeInfo struct {
+	Size           int    `json:"size"`
+	Fee            int    `json:"fee"`
+	FeeRate        int    `json:"feeRate"`
+	PayGoFee       int    `json:"payGoFee"`
+	PayGoFeeString string `json:"payGoFeeString"`
+}
+
+type Unspent struct {
+	Chain        int    `json:"chain"`
+	Index        int    `json:"index"`
+	RedeemScript string `json:"redeemScript"`
+	ID           string `json:"id"`
+	Address      string `json:"address"`
+	Value        int    `json:"value"`
 }
 
 func (b *BitGo) BuildTransaction(walletId string, params BuildTransactionParams) (transaction Transaction, err error) {
@@ -80,9 +86,7 @@ type SignedTransaction struct {
 
 func (b *BitGo) SignTransaction(walletId string, params SignTransactionParams) (signedTransaction SignedTransaction, err error) {
 	err = b.post(
-		fmt.Sprintf("%s/wallet/%s/signtx",
-			b.coin,
-			walletId),
+		fmt.Sprintf("%s/wallet/%s/signtx", b.coin, walletId),
 		params,
 		&signedTransaction)
 	return
