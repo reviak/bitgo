@@ -50,17 +50,17 @@ type ListWebhooks struct {
 }
 
 type WebhookWalletNotif struct {
-	Id        string      `json:"id"`
-	Type      WebhookType `json:"type"`
-	Wallet    string      `json:"wallet"`
-	Url       string      `json:"url"`
-	Hash      string      `json:"hash"`
-	Coin      string      `json:"coin"`
-	State     string      `json:"state"`
-	Transfer  string      `json:"transfer"`
-	Webhook   string      `json:"webhook"`
-	UpdatedAt time.Time   `json:"updatedAt"`
-	Version   int32       `json:"version"`
+	Id        string      `json:"id,omitempty"`
+	Type      WebhookType `json:"type,omitempty"`
+	Wallet    string      `json:"wallet,omitempty"`
+	Url       string      `json:"url,omitempty"`
+	Hash      string      `json:"hash,omitempty"`
+	Coin      string      `json:"coin,omitempty"`
+	State     string      `json:"state,omitempty"`
+	Transfer  string      `json:"transfer,omitempty"`
+	Webhook   string      `json:"webhook,omitempty"`
+	UpdatedAt time.Time   `json:"updatedAt,omitempty"`
+	Version   int32       `json:"version,omitempty"`
 }
 
 type WebhookUserNotif struct {
